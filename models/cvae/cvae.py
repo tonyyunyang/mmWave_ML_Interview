@@ -84,11 +84,12 @@ class CVAE(nn.Module):
             
         for layer in self.encoder_layers:
             out = layer(out)
+            
         out = out.reshape((x.size(0), -1))
-        mu = out
+        mu = out.clone()   # Create separate copy for mean path
+        std = out.clone()  # Create separate copy for std/logvar path
         for layer in self.encoder_mu_fc:
             mu = layer(mu)
-        std = out
         for layer in self.encoder_var_fc:
             std = layer(std)
 

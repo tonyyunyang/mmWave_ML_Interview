@@ -7,6 +7,13 @@ import pickle
 import matplotlib.pyplot as plt
 
 
+def check_nan(tensor, name):
+    if torch.isnan(tensor).any():
+        print(f"NaN detected in {name}")
+        return True
+    return False
+
+
 def train_for_one_epoch(epoch_idx, model, mnist_loader, optimizer, crtierion, config, device):
     r"""
     Method to run the training for one epoch.
@@ -32,6 +39,9 @@ def train_for_one_epoch(epoch_idx, model, mnist_loader, optimizer, crtierion, co
         # Remove label parameter from model call
         output = model(im)
         mean = output['mean']
+        
+        # if check_nan(mean, "mean"): continue
+
         std, log_variance = None, None
         if config['model_params']['log_variance']:
             log_variance = output['log_variance']
