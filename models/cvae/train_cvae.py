@@ -63,9 +63,15 @@ def train_for_one_epoch(epoch_idx, model, data_loader, optimizer, crtierion, con
             for idx in range(batch_size):
                 current_name = im_name[idx] if isinstance(im_name, (list, tuple)) else im_name
                 
-                # Save input and output images with epoch number to prevent overwriting
-                input_path = os.path.join(save_path, f"{current_name}_input_epoch{epoch_idx}.jpg")
-                output_path = os.path.join(save_path, f"{current_name}_output_epoch{epoch_idx}.jpg")
+                # Create sample-specific directory
+                sample_dir_input = os.path.join(save_path, current_name, "input")
+                sample_dir_output = os.path.join(save_path, current_name, "output")
+                os.makedirs(sample_dir_input, exist_ok=True)
+                os.makedirs(sample_dir_output, exist_ok=True)
+                
+                # Save input and output images with epoch number
+                input_path = os.path.join(sample_dir_input, f"input_epoch{epoch_idx}.jpg")
+                output_path = os.path.join(sample_dir_output, f"output_epoch{epoch_idx}.jpg")
                 
                 # Save as JPEG
                 Image.fromarray(input_imgs[idx]).save(input_path)
