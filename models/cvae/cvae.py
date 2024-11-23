@@ -31,7 +31,7 @@ class CVAE(nn.Module):
         self.encoder_layers = nn.ModuleList([
             nn.Sequential(
                 nn.Conv2d(config['convbn_channels'][i], config['convbn_channels'][i + 1],
-                          kernel_size=config['conv_kernel_size'][i], stride=config['conv_kernel_strides'][i]),
+                          kernel_size=config['conv_kernel_size'][i], stride=config['conv_kernel_strides'][i], padding=config['conv_padding'][i]),
                 nn.BatchNorm2d(config['convbn_channels'][i + 1]),
                 activation_map[config['conv_activation_fn']]
             )
@@ -62,7 +62,8 @@ class CVAE(nn.Module):
             nn.Sequential(
                 nn.ConvTranspose2d(config['transposebn_channels'][i], config['transposebn_channels'][i + 1],
                                    kernel_size=config['transpose_kernel_size'][i],
-                                   stride=config['transpose_kernel_strides'][i]),
+                                   stride=config['transpose_kernel_strides'][i],
+                                   padding=config['transpose_padding'][i]),
                 nn.BatchNorm2d(config['transposebn_channels'][i + 1]),
                 activation_map[config['transpose_activation_fn']]
             )
@@ -133,25 +134,4 @@ def get_model(config):
         config=config['model_params']
     )
     return model
-
-
-if __name__ == '__main__':
-    import torch
-    import torch.nn as nn
-    import yaml
-    
-    config_path = '../config/vae_kl_latent4.yaml'
-    with open(config_path, 'r') as file:
-        try:
-            config = yaml.safe_load(file)
-        except yaml.YAMLError as exc:
-            print(exc)
-    
-    model = get_model(config)
-    labels = torch.zeros((3)).long()
-    labels[0] = 0
-    labels[1] = 2
-    out = model(torch.rand((3,1,28,28)), labels)
-    print(out['mean'].shape)
-    print(out['image'].shape)
 
