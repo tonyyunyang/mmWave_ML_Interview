@@ -12,7 +12,7 @@ def extract_features(model, dataloader, device):
     
     with torch.no_grad():
         for batch, filenames in dataloader:
-            batch = batch.to(device)
+            batch = batch.float().to(device)
             features_batch = encode_features(model, batch)
             features.append(features_batch.cpu().numpy())
             filenames_list.extend(filenames)
