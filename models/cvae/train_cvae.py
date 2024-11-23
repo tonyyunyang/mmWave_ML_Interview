@@ -22,11 +22,15 @@ def train_for_one_epoch(epoch_idx, model, mnist_loader, optimizer, crtierion, co
     kl_losses = []
     losses = []
     # We ignore the label for VAE
-    for im, label in tqdm(mnist_loader):
+    for im in tqdm(mnist_loader):
+        # Handle case where dataloader still returns a tuple but we only want first element
+        if isinstance(im, (tuple, list)):
+            im = im[0]
         im = im.float().to(device)
-        label = label.long().to(device)
+        
         optimizer.zero_grad()
-        output = model(im, label)
+        # Remove label parameter from model call
+        output = model(im)
         mean = output['mean']
         std, log_variance = None, None
         if config['model_params']['log_variance']:
@@ -64,18 +68,19 @@ def visualize_latent_space(config, model, data_loader, save_fig_path, device):
     :param save_fig_path: Path where the latent space image will be saved
     :return:
     """
-    labels = []
     means = []
     
-    for im, label in tqdm(data_loader):
+    # Modified to unpack only images from dataloader
+    for im in tqdm(data_loader):
+        # Handle case where dataloader still returns a tuple but we only want first element
+        if isinstance(im, (tuple, list)):
+            im = im[0]
         im = im.float().to(device)
-        label = label.long().to(device)
-        output = model(im, label)
-        labels.append(label)
+        # Remove label parameter from model call
+        output = model(im)
         mean = output['mean']
         means.append(mean)
     
-    labels = torch.cat(labels, dim=0).reshape(-1)
     means = torch.cat(means, dim=0)
     if model.latent_dim != 2:
         print('Latent dimension > 2 and hence projecting')
@@ -86,11 +91,8 @@ def visualize_latent_space(config, model, data_loader, save_fig_path, device):
         pickle.dump(V, open('{}/pca_matrix.pkl'.format(config['train_params']['task_name']), 'wb'))
         means = proj_means
     
+    # Modified plotting code to show points without color-coding by label
     fig, ax = plt.subplots()
-    for num in range(10):
-        idxs = torch.where(labels == num)[0]
-        ax.scatter(means[idxs, 0].cpu().numpy(), means[idxs, 1].cpu().numpy(), s=10, label=str(num),
-                   alpha=1.0, edgecolors='none')
-    ax.legend()
+    ax.scatter(means[:, 0].cpu().numpy(), means[:, 1].cpu().numpy(), s=10, alpha=0.5)
     ax.grid(True)
     plt.savefig(save_fig_path)
