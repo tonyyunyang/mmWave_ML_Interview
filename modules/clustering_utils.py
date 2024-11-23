@@ -54,13 +54,9 @@ def plot_results(data_2d, labels, scores, method_name, score_type='Silhouette', 
 
 
 def analyze_clusters(clusters, save_to_file=True):
-    """
-    Print and optionally save detailed analysis of the clusters
-    """
     analysis_text = []
     analysis_text.append("Detailed Cluster Analysis:\n")
     
-    # Sort clusters by size
     sorted_clusters = sorted(clusters.items(), key=lambda x: len(x[1]), reverse=True)
     
     for cluster_id, files in sorted_clusters:
@@ -70,35 +66,14 @@ def analyze_clusters(clusters, save_to_file=True):
             "Files in this cluster:",
             "----------------"
         ]
-        # Add all files in the cluster
-        cluster_info.extend(sorted(files))  # Sort files for better readability
+        cluster_info.extend(sorted(files))
         cluster_info.append("----------------\n")
         
-        # Join with newlines and add to main analysis
         analysis_text.extend(cluster_info)
     
-    # Print to console
     print('\n'.join(analysis_text))
     
-    # Optionally save to file
     if save_to_file:
         with open('cluster_analysis.txt', 'w') as f:
             f.write('\n'.join(analysis_text))
         print(f"\nDetailed analysis has been saved to 'cluster_analysis.txt'")
-    
-    return analysis_text
-
-# Additional function to get files in a specific cluster
-def get_cluster_files(clusters, cluster_id):
-    """
-    Get all files belonging to a specific cluster
-    """
-    if cluster_id in clusters:
-        files = sorted(clusters[cluster_id])  # Sort for consistent output
-        print(f"\nFiles in Cluster {cluster_id} ({len(files)} files):")
-        print("----------------")
-        for file in files:
-            print(file)
-        print("----------------")
-    else:
-        print(f"Cluster {cluster_id} not found")
