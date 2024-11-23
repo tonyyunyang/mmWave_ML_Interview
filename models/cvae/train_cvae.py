@@ -61,8 +61,8 @@ def train_for_one_epoch(epoch_idx, model, mnist_loader, optimizer, crtierion, co
             )
             
             # Prepare file paths
-            input_gif_path = os.path.join(save_path, "gif", f"{im_name}_input.gif")
-            output_gif_path = os.path.join(save_path, "gif", f"{im_name}_output.gif")
+            input_gif_path = os.path.join(save_path, f"{im_name}_input.gif")
+            output_gif_path = os.path.join(save_path, f"{im_name}_output.gif")
             
             # Append to input GIF
             if os.path.exists(input_gif_path):
