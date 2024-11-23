@@ -56,8 +56,8 @@ def train_for_one_epoch(epoch_idx, model, data_loader, optimizer, crtierion, con
             batch_size = im.size(0)
             
             # Convert tensors to numpy arrays for full batch
-            input_imgs = (255.0 * (im.detach() + 1) / 2).cpu().numpy()[:, 0].astype(np.uint8)
-            output_imgs = (255.0 * (generated_im.detach() + 1) / 2).cpu().numpy()[:, 0].astype(np.uint8)
+            input_imgs = (255.0 * im.detach()).cpu().numpy()[:, 0].astype(np.uint8)
+            output_imgs = (255.0 * generated_im.detach()).cpu().numpy()[:, 0].astype(np.uint8)
             
             # Handle each image in batch
             for idx in range(batch_size):

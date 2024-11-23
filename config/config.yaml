@@ -5,12 +5,12 @@ model_params:
   conv_kernel_strides: [2, 2, 2, 2, 2]
   conv_padding: [1, 1, 1, 1, 1]
   convbn_channels: [1, 32, 64, 128, 256, 512]
-  enc_fc_layers: [32768, 4096, 512, 64, 8]
+  enc_fc_layers: [32768, 4096, 512, 64, 16]
   enc_fc_mu_activation: 'leaky'
   enc_fc_var_activation: 'leaky'
   conv_activation_fn: 'leaky'
   enc_fc_activation_fn: 'leaky'
-  dec_fc_layers: [8, 64, 512, 4096, 32768]
+  dec_fc_layers: [16, 64, 512, 4096, 32768]
   dec_fc_activation_fn: 'leaky'
   transpose_bn_blocks: 5
   transposebn_channels: [512, 256, 128, 64, 32, 1]
@@ -19,14 +19,14 @@ model_params:
   transpose_padding: [1, 1, 1, 1, 1]
   transpose_activation_fn: 'tanh'
   log_variance: True
-  latent_dim: 8
+  latent_dim: 16
 
 train_params:
   task_name: 'cvae_feature_extraction'
-  batch_size: 10
-  epochs: 100
-  kl_weight: 0.0005
-  lr: 0.00001
+  batch_size: 8
+  epochs: 1000
+  kl_weight: 0.00001
+  lr: 0.0001
   crit: 'l2'
   ckpt_name: 'best_cvae.pth'
   seed: 42
