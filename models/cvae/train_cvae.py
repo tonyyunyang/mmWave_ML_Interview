@@ -16,7 +16,7 @@ def check_nan(tensor, name):
     return False
 
 
-def train_for_one_epoch(epoch_idx, model, mnist_loader, optimizer, crtierion, config, device, save_path):
+def train_for_one_epoch(epoch_idx, model, data_loader, optimizer, crtierion, config, device, save_path):
     r"""
     Method to run the training for one epoch.
     :param epoch_idx: iteration number of current epoch
@@ -31,7 +31,7 @@ def train_for_one_epoch(epoch_idx, model, mnist_loader, optimizer, crtierion, co
     kl_losses = []
     losses = []
     # We ignore the label for VAE
-    for im, im_name in tqdm(mnist_loader):
+    for im, im_name in tqdm(data_loader):
         # Handle case where dataloader still returns a tuple but we only want first element
         if isinstance(im, (tuple, list)):
             im = im[0]
@@ -52,31 +52,34 @@ def train_for_one_epoch(epoch_idx, model, mnist_loader, optimizer, crtierion, co
         generated_im = output['image']
         generated_im = torch.clamp(generated_im, 0, 1)  # Clamp values between 0 and 1
         if config['train_params']['save_training_image']:
-            # Convert tensors to PIL Images
-            input_img = Image.fromarray(
-                (255.0 * (im.detach() + 1) / 2).cpu().numpy()[0, 0].astype(np.uint8)
-            )
-            output_img = Image.fromarray(
-                (255.0 * (generated_im.detach() + 1) / 2).cpu().numpy()[0, 0].astype(np.uint8)
-            )
+            # Handle full batch at once
+            batch_size = im.size(0)
             
-            # Prepare file paths
-            input_gif_path = os.path.join(save_path, f"{im_name}_input.gif")
-            output_gif_path = os.path.join(save_path, f"{im_name}_output.gif")
+            # Convert tensors to numpy arrays for full batch
+            input_imgs = (255.0 * (im.detach() + 1) / 2).cpu().numpy()[:, 0].astype(np.uint8)
+            output_imgs = (255.0 * (generated_im.detach() + 1) / 2).cpu().numpy()[:, 0].astype(np.uint8)
             
-            # Append to input GIF
-            if os.path.exists(input_gif_path):
-                with imageio.get_writer(input_gif_path, mode='a') as writer:
-                    writer.append_data(np.array(input_img))
-            else:
-                imageio.mimsave(input_gif_path, [np.array(input_img)])
-            
-            # Append to output GIF
-            if os.path.exists(output_gif_path):
-                with imageio.get_writer(output_gif_path, mode='a') as writer:
-                    writer.append_data(np.array(output_img))
-            else:
-                imageio.mimsave(output_gif_path, [np.array(output_img)])
+            # Handle each image in batch
+            for idx in range(batch_size):
+                current_name = im_name[idx] if isinstance(im_name, (list, tuple)) else im_name
+                
+                # Prepare file paths
+                input_gif_path = os.path.join(save_path, f"{current_name}_input.gif")
+                output_gif_path = os.path.join(save_path, f"{current_name}_output.gif")
+                
+                # Append to input GIF
+                if os.path.exists(input_gif_path):
+                    with imageio.get_writer(input_gif_path, mode='a') as writer:
+                        writer.append_data(input_imgs[idx])
+                else:
+                    imageio.mimsave(input_gif_path, [input_imgs[idx]])
+                
+                # Append to output GIF
+                if os.path.exists(output_gif_path):
+                    with imageio.get_writer(output_gif_path, mode='a') as writer:
+                        writer.append_data(output_imgs[idx])
+                else:
+                    imageio.mimsave(output_gif_path, [output_imgs[idx]])
         
         if config['model_params']['log_variance']:
             kl_loss = torch.mean(0.5 * torch.sum(torch.exp(log_variance) + mean ** 2 - 1 - log_variance, dim=-1))
