@@ -49,8 +49,8 @@ def train_for_one_epoch(epoch_idx, model, mnist_loader, optimizer, crtierion, co
             std = output['std']
         generated_im = output['image']
         if config['train_params']['save_training_image']:
-            cv2.imwrite('input.jpeg', (255 * (im.detach() + 1) / 2).cpu().numpy()[0, 0])
-            cv2.imwrite('output.jpeg', (255 * (generated_im.detach() + 1) / 2).cpu().numpy()[0, 0])
+            cv2.imwrite('input.jpeg', (255.0 * (im.detach() + 1) / 2).cpu().numpy()[0, 0])
+            cv2.imwrite('output.jpeg', (255.0 * (generated_im.detach() + 1) / 2).cpu().numpy()[0, 0])
         
         if config['model_params']['log_variance']:
             kl_loss = torch.mean(0.5 * torch.sum(torch.exp(log_variance) + mean ** 2 - 1 - log_variance, dim=-1))

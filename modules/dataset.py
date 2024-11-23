@@ -12,4 +12,4 @@ class SignatureFigDataset(Dataset):
     def __getitem__(self, idx):
         signature_fig = self.signature_figs[idx] # (H, W, C)
         signature_fig = einops.rearrange(signature_fig, "h w c -> c h w")
-        return signature_fig
+        return signature_fig / 255.0
