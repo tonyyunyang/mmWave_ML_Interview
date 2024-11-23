@@ -63,23 +63,13 @@ def train_for_one_epoch(epoch_idx, model, data_loader, optimizer, crtierion, con
             for idx in range(batch_size):
                 current_name = im_name[idx] if isinstance(im_name, (list, tuple)) else im_name
                 
-                # Prepare file paths
-                input_gif_path = os.path.join(save_path, f"{current_name}_input.gif")
-                output_gif_path = os.path.join(save_path, f"{current_name}_output.gif")
+                # Save input and output images with epoch number to prevent overwriting
+                input_path = os.path.join(save_path, f"{current_name}_input_epoch{epoch_idx}.jpg")
+                output_path = os.path.join(save_path, f"{current_name}_output_epoch{epoch_idx}.jpg")
                 
-                # Append to input GIF
-                if os.path.exists(input_gif_path):
-                    with imageio.get_writer(input_gif_path, mode='a') as writer:
-                        writer.append_data(input_imgs[idx])
-                else:
-                    imageio.mimsave(input_gif_path, [input_imgs[idx]])
-                
-                # Append to output GIF
-                if os.path.exists(output_gif_path):
-                    with imageio.get_writer(output_gif_path, mode='a') as writer:
-                        writer.append_data(output_imgs[idx])
-                else:
-                    imageio.mimsave(output_gif_path, [output_imgs[idx]])
+                # Save as JPEG
+                Image.fromarray(input_imgs[idx]).save(input_path)
+                Image.fromarray(output_imgs[idx]).save(output_path)
         
         if config['model_params']['log_variance']:
             kl_loss = torch.mean(0.5 * torch.sum(torch.exp(log_variance) + mean ** 2 - 1 - log_variance, dim=-1))
