@@ -20,8 +20,8 @@ model_params:
 train_params:
   task_name: 'cnn_personal_identity'
   batch_size: 4
-  epochs: 1000
-  lr: 0.00002
+  epochs: 10000
+  lr: 0.0001
   ckpt_name: 'best_cnn.pth'
   seed: 42
   weight_decay: 0.0001

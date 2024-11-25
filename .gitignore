@@ -3,3 +3,4 @@
 .DS_Store
 /data/b_np
 /retrain_cvae_feature_extraction
+/cnn_personal_identity

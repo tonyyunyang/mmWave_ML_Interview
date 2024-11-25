@@ -6,7 +6,6 @@ import os
 from tqdm import tqdm
 
 def train(model, train_loader, config, device):
-    # Create checkpoint directory
     ckpt_dir = config['train_params']['task_name']
     os.makedirs(ckpt_dir, exist_ok=True)
     
@@ -50,7 +49,3 @@ def train(model, train_loader, config, device):
             
         if (epoch + 1) % 10 == 0:
             print(f'Epoch [{epoch+1}/{config["train_params"]["epochs"]}], Loss: {epoch_loss:.4f}')
-
-# Usage
-torch.manual_seed(config['train_params']['seed'])
-train(model, train_loader, config, device)

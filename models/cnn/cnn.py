@@ -60,8 +60,8 @@ class CNN(nn.Module):
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         
         # Inception modules
-        self.inception1 = InceptionModule(64, 64, 96, 128, 16, 32, 32)  # out: 256 channels
-        self.inception2 = InceptionModule(256, 128, 128, 192, 32, 96, 64)  # out: 480 channels
+        self.inception1 = InceptionModule(64, 64, 96, 128, 16, 32, 32)
+        self.inception2 = InceptionModule(256, 128, 128, 192, 32, 96, 64)
         
         # Global average pooling
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
