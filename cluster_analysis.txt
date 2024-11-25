@@ -2,86 +2,50 @@ Detailed Cluster Analysis:
 
 
 Cluster 1:
-Number of samples: 30
+Number of samples: 28
 Files in this cluster:
 ----------------
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-50
-51
-52
-53
-54
-55
-56
-57
-----------------
-
-
-Cluster 3:
-Number of samples: 14
-Files in this cluster:
-----------------
-0
-1
-10
-2
-3
-4
-43
-44
-45
-5
-6
-7
-8
-9
-----------------
-
-
-Cluster 2:
-Number of samples: 7
-Files in this cluster:
-----------------
-11
-15
-17
-19
-46
-47
-49
+A_0
+A_1
+A_2
+A_3
+A_4
+A_5
+A_6
+A_7
+A_8
+A_9
+B_0
+B_1
+B_10
+B_2
+B_3
+B_6
+B_7
+B_8
+C_0
+C_1
+C_10
+C_2
+C_3
+C_4
+C_5
+C_6
+C_7
+C_8
 ----------------
 
 
 Cluster 0:
-Number of samples: 7
+Number of samples: 8
 Files in this cluster:
 ----------------
-12
-13
-14
-16
-18
-20
-48
+A_10
+A_11
+B_11
+B_4
+B_5
+B_9
+C_11
+C_9
 ----------------

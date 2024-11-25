@@ -22,8 +22,8 @@ model_params:
   latent_dim: 16
 
 train_params:
-  task_name: 'cvae_feature_extraction'
-  batch_size: 8
+  task_name: 'retrain_cvae_feature_extraction'
+  batch_size: 12
   epochs: 1000
   kl_weight: 0.00001
   lr: 0.0001
