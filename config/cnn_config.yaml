@@ -1,0 +1,28 @@
+model_params:
+  in_channels: 1
+  class_num: 3
+  inception_configs:
+    - in_channels: 1
+      out_1x1: 64
+      red_3x3: 96
+      out_3x3: 128
+      red_5x5: 16
+      out_5x5: 32
+      out_pool: 32
+    - in_channels: 256
+      out_1x1: 128
+      red_3x3: 128
+      out_3x3: 192
+      red_5x5: 32
+      out_5x5: 96
+      out_pool: 64
+
+train_params:
+  task_name: 'cnn_personal_identity'
+  batch_size: 4
+  epochs: 1000
+  lr: 0.00002
+  ckpt_name: 'best_cnn.pth'
+  seed: 42
+  weight_decay: 0.0001
+  momentum: 0.9

@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
+from PIL import Image
 
 
 def load_signatures(signatures_path, min_n_time_points):
@@ -77,3 +78,21 @@ def analyze_clusters(clusters, save_to_file=True):
         with open('cluster_analysis.txt', 'w') as f:
             f.write('\n'.join(analysis_text))
         print(f"\nDetailed analysis has been saved to 'cluster_analysis.txt'")
+
+
+def process_images(data_path):
+    images = []
+    labels = []
+    
+    for filename in os.listdir(data_path):
+        if filename.endswith('.png'):
+            label = filename[0]
+            
+            img_path = os.path.join(data_path, filename)
+            img = Image.open(img_path).convert('L')
+            img_array = np.array(img)
+            
+            images.append(img_array)
+            labels.append(label)
+    
+    return np.array(images), np.array(labels)
