@@ -23,10 +23,10 @@ model_params:
 
 train_params:
   task_name: 'retrain_cvae_feature_extraction'
-  batch_size: 12
+  batch_size: 4
   epochs: 1000
   kl_weight: 0.00001
-  lr: 0.0001
+  lr: 0.00002
   crit: 'l2'
   ckpt_name: 'best_cvae.pth'
   seed: 42
